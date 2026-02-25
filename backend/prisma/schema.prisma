@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id                 Int            @id @default(autoincrement())
+  name               String
+  phone              String?
+  email              String?
+  birthday           String?        // MM-DD format
+  notes              String?
+  tags               String[]       @default([])
+  religion           String?
+  lastInteraction    DateTime?
+  followUpInterval   Int?           // days
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  customFields       CustomField[]
+  socialLinks        SocialLink[]
+  interactions       Interaction[]
+}
+
+model CustomField {
+  id        Int     @id @default(autoincrement())
+  contactId Int
+  key       String
+  value     String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model SocialLink {
+  id        Int     @id @default(autoincrement())
+  contactId Int
+  platform  String  // instagram, facebook, tiktok, youtube, whatsapp, telegram, signal, pinterest, linkedin, twitter
+  handle    String?
+  url       String?
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model Interaction {
+  id        Int      @id @default(autoincrement())
+  contactId Int
+  date      DateTime @default(now())
+  type      String   // in_person, digital
+  platform  String?
+  notes     String?
+  link      String?
+  contact   Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model FollowUpRule {
+  id              Int      @id @default(autoincrement())
+  name            String
+  triggerType     String   // birthday, holiday, interval, tag_event
+  tagFilter       String?
+  triggerDate     String?  // MM-DD for annual dates
+  intervalDays    Int?
+  messageTemplate String?
+  autoSendEmail   Boolean  @default(false)
+  holidayName     String?
+  holidayDate     String?  // per-year override MM-DD
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  message   String
+  category  String   // Bug, Feature Request, Other
+  createdAt DateTime @default(now())
+}
