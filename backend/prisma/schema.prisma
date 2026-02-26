@@ -16,6 +16,8 @@ model Contact {
   notes              String?
   tags               String[]       @default([])
   religion           String?
+  city               String?
+  country            String?
   lastInteraction    DateTime?
   followUpInterval   Int?           // days
   createdAt          DateTime       @default(now())

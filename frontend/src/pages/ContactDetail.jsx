@@ -9,6 +9,8 @@ const CORE_FIELDS = [
   FIELD('Full Name', 'name', 'text', { required: true }),
   FIELD('Email', 'email', 'email'),
   FIELD('Phone', 'phone', 'tel'),
+  FIELD('City', 'city'),
+  FIELD('Country', 'country'),
   FIELD('Birthday (MM-DD)', 'birthday', 'text', { placeholder: 'MM-DD' }),
   FIELD('Religion', 'religion'),
   FIELD('Follow-up every (days)', 'followUpInterval', 'number', { min: 1 }),
@@ -36,6 +38,8 @@ export default function ContactDetail() {
         name: c.name || '',
         email: c.email || '',
         phone: c.phone || '',
+        city: c.city || '',
+        country: c.country || '',
         birthday: c.birthday || '',
         religion: c.religion || '',
         followUpInterval: c.followUpInterval || '',
@@ -215,6 +219,9 @@ export default function ContactDetail() {
           <div className="grid grid-cols-2 gap-3 text-sm">
             {contact.email && <div><span className="text-gray-500">Email</span><p className="font-medium">{contact.email}</p></div>}
             {contact.phone && <div><span className="text-gray-500">Phone</span><p className="font-medium">{contact.phone}</p></div>}
+            {(contact.city || contact.country) && (
+              <div><span className="text-gray-500">Location</span><p className="font-medium">{[contact.city, contact.country].filter(Boolean).join(', ')}</p></div>
+            )}
             {contact.birthday && <div><span className="text-gray-500">Birthday</span><p className="font-medium">{contact.birthday}</p></div>}
             {contact.religion && <div><span className="text-gray-500">Religion</span><p className="font-medium">{contact.religion}</p></div>}
             {contact.followUpInterval && (
