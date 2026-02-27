@@ -2,6 +2,8 @@ FROM node:22-bookworm-slim
 
 WORKDIR /app
 
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci --production
